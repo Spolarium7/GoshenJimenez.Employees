@@ -11,6 +11,6 @@ Initial Catalog (Database name) : dbEmployees
 
 Login credentials:
 Email = urza@mailinator.com
-Password = @ r c @ n 1 s 0 7 (without spaces)
+Password = @rc@n1s07
 
 # README #
