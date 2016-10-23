@@ -10,7 +10,7 @@ Entity Framework
 Initial Catalog (Database name) : dbEmployees
 
 Login credentials:
-Email = urza@mailinator.com
-Password = @rc@n1s07
+Email = "urza@mailinator.com"
+Password = "@rc@n1s07"
 
 # README #
