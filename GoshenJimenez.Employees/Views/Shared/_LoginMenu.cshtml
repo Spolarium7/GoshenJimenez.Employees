@@ -1,0 +1,33 @@
+﻿@if (GoshenJimenez.Employees.Security.WebUser.CurrentUser != null)
+{
+    <div class="navbar navbar-inverse" role="banner">
+        <nav class="collapse navbar-collapse bs-navbar-collapse navbar-right" role="navigation">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">@GoshenJimenez.Employees.Security.WebUser.CurrentUser.Name <b class="caret"></b></a>
+                    <ul class="dropdown-menu animated fadeInUp">
+                        <li><a href="~/account/changepassword">Change Password</a></li>
+                        <li class="divider"></li>
+                        <li><a href="~/account/logoff">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+}
+else {
+
+    <div class="navbar navbar-inverse" role="banner">
+        <nav class="collapse navbar-collapse bs-navbar-collapse navbar-right" role="navigation">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Options <b class="caret"></b></a>
+                    <ul class="dropdown-menu animated fadeInUp">
+                        <li><a href="~/account/register">Register</a></li>
+                        <li><a href="~/account/login">Log in</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+}

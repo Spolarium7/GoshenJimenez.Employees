@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Goshen Jimenez</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/content/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/content/css/styles.css" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <!-- Logo -->
+                    <div class="logo">
+                        <h1><a href="index.html">Employee list</a></h1>
+                    </div>
+                </div>
+                <div class="col-md-4 pull-right">
+                   @Html.Partial("_LoginMenu")
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        @RenderBody()
+    </div>
+    <footer>
+        <div class="container">
+
+            <div class="copy text-center">
+                Layout by <a href='https://github.com/VinceG/Bootstrap-Admin-Theme-3'>Bootstrap</a>
+            </div>
+
+        </div>
+    </footer>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="~/content/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/content/js/custom.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

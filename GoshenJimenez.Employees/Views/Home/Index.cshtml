@@ -1,0 +1,377 @@
+﻿@using GoshenJimenez.Employees.Models.Enums;
+@using GoshenJimenez.Employees.Models;
+@model GoshenJimenez.Employees.ViewModels.Employees.EmployeesPageViewModel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="row">
+    <div class="col-md-2">
+        <div class="sidebar content-box" style="display: block;">
+            <ul class="nav">
+                <!-- Main menu -->
+                <li class="current"><a href="~/home/index"><i class="glyphicon glyphicon-list"></i> Employees</a></li>
+                <li><a href="~/home/create"><i class="glyphicon glyphicon-plus-sign"></i> New Employee</a></li>
+                <!--<li><a href="stats.html"><i class="glyphicon glyphicon-stats"></i> View payroll</a></li>-->
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-10">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="content-box-header">
+                    <div class="panel-title">Filters</div>
+                    <div class="panel-options">
+                        <a href="#" data-rel="collapse" onclick="resetFilters()"><i class="glyphicon glyphicon-refresh" title="reset filters"></i></a>
+                    </div>
+                </div>
+                <div class="content-box-large box-with-header">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="input-group form ">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                        @(string.IsNullOrEmpty(Model.Gender) ? "Gender" : Model.Gender) <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        @{ if (Model != null)
+                                            {
+                                                if (Model.GenderChoices != null)
+                                                {
+                                                    foreach (Gender gender in Model.GenderChoices)
+                                                    {
+                                                        <li><a class="genderFilter" value="@gender.ToString()">@gender.ToString()</a></li>
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="input-group form ">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                                        @(string.IsNullOrEmpty(Model.Assignment) ? "Assignment" : Model.Assignment) <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        @{ if (Model != null)
+                                            {
+                                                if (Model.AssignmentChoices != null)
+                                                {
+                                                    foreach (Assignment assignment in Model.AssignmentChoices)
+                                                    {
+                                                        <li><a class="assignmentFilter" value="@assignment.ToString()">@assignment.ToString()</a></li>
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="input-group form ">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                                        @(string.IsNullOrEmpty(Model.Status) ? "Status" : Model.Status)
+                                         <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        @{ if (Model != null)
+                                            {
+                                                if (Model.StatusChoices != null)
+                                                {
+                                                    foreach (EmployeeStatus status in Model.StatusChoices)
+                                                    {
+                                                        <li><a class="statusFilter" value="@status.ToString()">@status.ToString()</a></li>
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group form pull-right">
+                                <input type="text" class="form-control" placeholder="Search by firstname or lastname..." id="searchKeyword" value="@(Model.Employees != null ? Model.Employees.Keyword : "")">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="button" onclick="searchKeywordFilter()">Search</button>
+                                </span>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+@if (Model.Employees != null)
+{
+    if (Model.Employees.Items != null)
+    {
+        if (Model.Employees.Items.Count > 0)
+        {
+        <div class="row">
+            <div class="col-md-10">
+                <div class="content-box-large">
+                    <div class="panel-heading">
+                        <div class="panel-title">Employees</div>
+                    </div>
+                    <div class="panel-body">
+                        @{ if (Model != null)
+                            {
+                                if (Model.Employees != null)
+                                {
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>First Name</th>
+                                                <th>Last Name</th>
+                                                <th>Salary</th>
+                                                <th>Assignment</th>
+                                                <th>Status</th>
+                                                <th>Gender</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+                                                foreach (Employee employee in Model.Employees.Items)
+                                                {
+                                                    <tr>
+                                                        <td>@(employee.Id)</td>
+                                                        <td>@(employee.FirstName)</td>
+                                                        <td>@(employee.LastName)</td>
+                                                        <td>@(employee.BaseSalary)</td>
+                                                        <td>@(employee.Assignment.ToString())</td>
+                                                        <td>@(employee.Status.ToString())</td>
+                                                        <td>@(employee.Gender.ToString())</td>
+                                                        <td>
+                                                            <a href="/home/edit/@(employee.Id)">
+                                                                <i class="glyphicon glyphicon-pencil"></i>
+                                                            </a>&nbsp;&nbsp;
+                                                            <a href="#" onclick="confirmRemove('@(employee.Id)','@(employee.FirstName) @(employee.LastName)')">
+                                                                <i class="glyphicon glyphicon-remove"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+
+
+                                }
+                            }
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-10">
+                <div class="content-box-large">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="input-group form">
+                                <input type="text" class="form-control" id="pageSize" placeholder="Pagesize..." value="@(Model.Employees != null ? Model.Employees.PageSize : 0)">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="button" onclick="setPageSize()">Set pagesize</button>
+                                </span>
+                            </div> 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group form">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                                        Sort by @(Model.Employees != null ? Model.Employees.SortBy : "") <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        @{ if (Model != null)
+                                            {
+                                                if (Model.SortChoices != null)
+                                                {
+                                                    foreach (string sort in Model.SortChoices)
+                                                    {
+                                                        <li><a class="sortOption" value="@sort.ToString()">@sort.ToString()</a></li>
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="input-group form">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="chkIsAscending" @(Model.Employees != null ? (Model.Employees.IsAscending ? "checked" : "") : "") onclick="sort('@(Model.Employees != null ? (Model.Employees.SortBy != null ? Model.Employees.SortBy : "") : "")')">
+                                        Ascending order
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="btn-group pull-right">
+                                @{
+                                    if (Model.Employees != null) {
+                                        <button class="btn btn-default" onclick="gotoPage(1)"><i class="glyphicon glyphicon-step-backward"></i></button>
+                                        if ((Model.Employees.PageIndex - 1) > 0)
+                                        {
+                                            <button class="btn btn-default" onclick="gotoPage(@(Model.Employees.PageIndex - 1))"><i class="glyphicon glyphicon-backward"></i></button>
+                                        }
+                                        if ((Model.Employees.PageIndex - 1) >= 1)
+                                        {
+                                            <button class="btn btn-default" onclick="gotoPage(@(Model.Employees.PageIndex - 1))">@(Model.Employees.PageIndex - 1)</button>
+                                        }
+                                        <button class="btn btn-default disabled">page @(Model.Employees.PageIndex) of @(Model.Employees.TotalPages)</button>
+                                        if ((Model.Employees.PageIndex + 1) < Model.Employees.TotalPages)
+                                        {
+                                            <button class="btn btn-default" onclick="gotoPage(@(Model.Employees.PageIndex + 1))">@(Model.Employees.PageIndex + 1)</button>
+                                        }
+                                        if ((Model.Employees.PageIndex + 1) <= Model.Employees.TotalPages)
+                                        {
+                                            <button class="btn btn-default" onclick="gotoPage(@(Model.Employees.PageIndex + 1))"><i class="glyphicon glyphicon-forward"></i></button>
+                                        }
+                                        <button class="btn btn-default" onclick="gotoPage(@Model.Employees.TotalPages)"><i class="glyphicon glyphicon-step-forward"></i></button>
+                                    } 
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            }
+        }
+    }
+     </div>
+</div>
+
+<div class="modal fade" id="mdlConfirmRemoveEmployee" tabindex="-1" role="dialog" aria-labelledby="mdlForm" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><span>&#xf03a;</span> Remove Employee</h4>
+            </div>
+            <form class="form-horizontal" role="form">
+                <div class="modal-body">
+                    <div class="col-lg-12">
+                        <span class="help-block">Are you sure you want to remove <i id="removeEmployeeName"></i>?</span>
+
+                        <input type="hidden" id="removeEmployeeId" value="" />
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-red" onclick="deleteEmployee()">Delete</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+
+            //////////////////////Filters//////////////////////////////////////////////////////////////////
+            $('.genderFilter').click(function (e) {
+                var gender = $(this).attr("value");
+                var url = "/home/index?pageSize=@(Model.Employees.PageSize)&pageIndex=1&sortBy=@(Model.Employees.SortBy)&isAscending=@(Model.Employees.IsAscending)&keyword=@(Model.Employees.Keyword)&gender=" + gender + "&assignment=@(Model.Assignment)&status=@(Model.Status)";
+                window.location = url;
+            });
+            $('.assignmentFilter').click(function (e) {
+                var assignment = $(this).attr("value");
+                var url = "/home/index?pageSize=@(Model.Employees.PageSize)&pageIndex=1&sortBy=@(Model.Employees.SortBy)&isAscending=@(Model.Employees.IsAscending)&keyword=@(Model.Employees.Keyword)&gender=@(Model.Gender)&assignment=" + assignment + "&status=@(Model.Status)";
+                window.location = url;
+            });
+            $('.statusFilter').click(function (e) {
+                var status = $(this).attr("value");
+                var url = "/home/index?pageSize=@(Model.Employees.PageSize)&pageIndex=1&sortBy=@(Model.Employees.SortBy)&isAscending=@(Model.Employees.IsAscending)&keyword=@(Model.Employees.Keyword)&gender=@(Model.Gender)&assignment=@(Model.Assignment)&status=" + status;
+                window.location = url;
+            });
+            $('#searchKeyword').keypress(function (e) {
+                if (e.which == 13) {
+                    searchKeywordFilter();
+                }
+            });
+            //////////////////////Sorting//////////////////////////////////////////////////////////////////
+            $('.sortOption').click(function (e) {
+                var sortBy = $(this).attr("value");
+                sort(sortBy);
+            });
+            //////////////////////Paging//////////////////////////////////////////////////////////////////
+            $('#pageSize').keypress(function (e) {
+                if (e.which == 13) {
+                    setPageSize();
+                }
+            });
+        });
+
+        function resetFilters() {
+            var url = "/home/index?pageSize=@(Model.Employees.PageSize)&pageIndex=1&sortBy=@(Model.Employees.SortBy)&isAscending=@(Model.Employees.IsAscending)&keyword=&gender=&assignment=&status=";
+            window.location = url;
+        }
+        function searchKeywordFilter() {
+            var keyword = $("#searchKeyword").val();
+            var url = "/home/index?pageSize=@(Model.Employees.PageSize)&pageIndex=1&sortBy=@(Model.Employees.SortBy)&isAscending=@(Model.Employees.IsAscending)&keyword=" + keyword + "&gender=@(Model.Gender)&assignment=@(Model.Assignment)&status=@(Model.Status)";
+            window.location = url;
+        }
+        function sort(sortBy) {
+            var isAscending = $("#chkIsAscending").prop("checked");
+            var url = "/home/index?pageSize=@(Model.Employees.PageSize)&pageIndex=1&sortBy=" + sortBy + "&isAscending=" + isAscending + "&keyword=@(Model.Employees.Keyword)&gender=@(Model.Gender)&assignment=@(Model.Assignment)&status=@(Model.Status)";
+            window.location = url;
+        }
+        function gotoPage(pageIndex) {
+            if(pageIndex < 1){
+                pageIndex = 1;
+            }
+            if(pageIndex > parseFloat(@(Model.Employees != null ? Model.Employees.TotalPages : 1))){
+                pageIndex = parseFloat(@(Model.Employees != null ? Model.Employees.TotalPages : 1));
+            }
+            var url = "/home/index?pageSize=@(Model.Employees.PageSize)&pageIndex=" + pageIndex + "&sortBy=@(Model.Employees.SortBy)&isAscending=@(Model.Employees.IsAscending)&keyword=@(Model.Employees.Keyword)&gender=@(Model.Gender)&assignment=@(Model.Assignment)&status=@(Model.Status)";
+            window.location = url;
+        }
+        function setPageSize() {
+            var pageSize = parseFloat($("#pageSize").val());
+            if (pageSize < 1) {
+                pageSize = 1;
+            }
+            if (pageSize > parseFloat(@(Model.Employees != null ? Model.Employees.TotalItems : 1))) {
+                pageSize = parseFloat(@(Model.Employees != null ? Model.Employees.TotalItems : 1));
+            }
+            var url = "/home/index?pageSize=" + pageSize + "&pageIndex=1&sortBy=@(Model.Employees.SortBy)&isAscending=@(Model.Employees.IsAscending)&keyword=@(Model.Employees.Keyword)&gender=@(Model.Gender)&assignment=@(Model.Assignment)&status=@(Model.Status)";
+            window.location = url;
+        }
+        function confirmRemove(id, name) {
+            $("#removeEmployeeName").html(name);
+            $("#removeEmployeeId").val(id);
+            $("#mdlConfirmRemoveEmployee").modal('show');
+        }
+        function deleteEmployee() {
+            var model = {
+                id: $("#removeEmployeeId").val()
+            }
+
+            $.ajax({
+                url: "@Url.Content("~/home/remove")",
+                dataType: "json",
+                data: model,
+                type: "POST"
+            }).done(function (obj) {
+                location.reload();
+            }).fail(function (obj) {
+
+            });
+        }
+    </script>
+}
